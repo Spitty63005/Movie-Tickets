@@ -79,41 +79,23 @@ public class LoginController
         boolean emptyTextBoxes = (user.isEmpty() && password.isEmpty() && name.isEmpty() && email.isEmpty());
         if(emptyTextBoxes)
             DButils.createAlert(Alert.AlertType.ERROR, "Please enter all test fields.", "Missing information.");
-        if(validateRegisterCredentials(password))
+        else
         {
             System.out.println(":p");
+            if(!validateRegisterCredentials())
+            {
+                DButils.createAlert(Alert.AlertType.ERROR, "Please enter a valid email.", "Invalid email.");
+                return;
+            }
             DButils.switchScene(DButils.signup(user, email, name, password), register_btn, "application.fxml");
         }
     }
 
-    public boolean validateRegisterCredentials(String pass)
+    public boolean validateRegisterCredentials()
     {
-        Pattern pattern = Pattern.compile("[a-zA-Z0-9][a-zA-Z0-9]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+");
-        Matcher matcher = pattern.matcher("register_email_tf");
-
-        boolean hasSpecialChar = false;
-        boolean hasCapitalChar = false;
-        boolean hasNumberChar = false;
-        for(int i = 0; i < pass.length(); i++)
-        {
-            if(isDigit(pass.charAt(i)))
-            {
-                hasNumberChar = true;
-                continue;
-            }
-            if(!isDigit(pass.charAt(i)) && !isLetter(pass.charAt(i)))
-            {
-                hasSpecialChar = true;
-                continue;
-            }
-            if(isUpperCase(pass.charAt(i)))
-            {
-                hasCapitalChar = true;
-            }
-
-        }
-
-        return (hasCapitalChar && hasNumberChar && hasSpecialChar) && matcher.find();
+        Pattern pattern = Pattern.compile("^[\\w-.]+@([\\w-]+.)+[\\w-]{2,4}$");
+        Matcher matcher = pattern.matcher(register_email_tf.getText());
+        return matcher.find();
 
     }
     //endregion

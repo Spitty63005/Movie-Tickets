@@ -27,7 +27,7 @@
             <AnchorPane fx:id="login_ap" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <TextField fx:id="login_username_tf" layoutX="224.0" layoutY="153.0" onAction="#login" promptText="Username" />
-                  <PasswordField fx:id="login_password_pf" layoutX="224.0" layoutY="208.0" onAction="#login" promptText="Password" stylesheets="@Style.css" />
+                  <PasswordField fx:id="login_password_pf" layoutX="224.0" layoutY="208.0" onAction="#login" promptText="Password" stylesheets="@LoginStyle.css" />
                   <Label fx:id="changePasslbl" layoutX="300.0" layoutY="243.0" prefHeight="18.0" prefWidth="84.0" text="Forgot password?">
                      <font>
                         <Font size="10.0" />
