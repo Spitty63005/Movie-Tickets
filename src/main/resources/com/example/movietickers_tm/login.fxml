@@ -17,7 +17,7 @@
             <Label layoutX="284.0" layoutY="13.0" prefHeight="18.0" prefWidth="32.0" text="login" />
             <Label layoutX="24.0" layoutY="13.0" text="Toddyie's movies" />
             <Button layoutX="506.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeButton" prefHeight="30.0" prefWidth="79.0" text="x" />
-            <Button layoutX="409.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="79.0" text="-" />
+            <Button fx:id="minimize_btn" layoutX="409.0" layoutY="6.0" mnemonicParsing="false" onAction="#minimize" prefHeight="30.0" prefWidth="79.0" text="-" />
          </children>
       </Pane>
    </top>
@@ -26,14 +26,14 @@
          <children>
             <AnchorPane fx:id="login_ap" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <TextField fx:id="login_userfield" layoutX="224.0" layoutY="153.0" onAction="#login" promptText="Username" />
-                  <PasswordField fx:id="login_passfield" layoutX="224.0" layoutY="208.0" onAction="#login" promptText="Password" stylesheets="@Style.css" />
+                  <TextField fx:id="login_username_tf" layoutX="224.0" layoutY="153.0" onAction="#login" promptText="Username" />
+                  <PasswordField fx:id="login_password_pf" layoutX="224.0" layoutY="208.0" onAction="#login" promptText="Password" stylesheets="@Style.css" />
                   <Label fx:id="changePasslbl" layoutX="300.0" layoutY="243.0" prefHeight="18.0" prefWidth="84.0" text="Forgot password?">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Label>
-                  <Button layoutX="241.0" layoutY="278.0" mnemonicParsing="false" onAction="#login" prefHeight="56.0" prefWidth="118.0" text="Login" />
+                  <Button fx:id="login_btn" layoutX="241.0" layoutY="278.0" mnemonicParsing="false" onAction="#login" prefHeight="56.0" prefWidth="118.0" text="Login" />
                   <Button layoutX="465.0" layoutY="291.0" mnemonicParsing="false" onAction="#toggleLoginAndRegister" text="Register" />
                   <Label layoutX="428.0" layoutY="261.0" text="Don't have an account?" />
                </children>
@@ -41,12 +41,12 @@
             <AnchorPane fx:id="register_ap" prefHeight="200.0" prefWidth="200.0" visible="false">
                <children>
                   <Button layoutX="465.0" layoutY="291.0" mnemonicParsing="false" onAction="#toggleLoginAndRegister" prefHeight="30.0" prefWidth="64.0" text="Login" />
-                  <Button layoutX="241.0" layoutY="278.0" mnemonicParsing="false" onAction="#login" prefHeight="56.0" prefWidth="118.0" text="Register" />
+                  <Button fx:id="register_btn" layoutX="241.0" layoutY="278.0" mnemonicParsing="false" onAction="#signup" prefHeight="56.0" prefWidth="118.0" text="Register" />
                   <Label layoutX="428.0" layoutY="260.0" text="Already have an account?" />
-                  <TextField layoutX="107.0" layoutY="153.0" promptText="Email" />
-                  <TextField layoutX="107.0" layoutY="208.0" promptText="Username" />
-                  <TextField layoutX="313.0" layoutY="153.0" promptText="Name" />
-                  <PasswordField layoutX="313.0" layoutY="208.0" promptText="Password" />
+                  <TextField fx:id="register_email_tf" layoutX="107.0" layoutY="153.0" promptText="Email" />
+                  <TextField fx:id="register_username_tf" layoutX="107.0" layoutY="208.0" promptText="Username" />
+                  <TextField fx:id="register_name_tf" layoutX="313.0" layoutY="153.0" promptText="Name" />
+                  <PasswordField fx:id="register_password_pf" layoutX="313.0" layoutY="208.0" promptText="Password" />
                </children>
             </AnchorPane>
          </children>

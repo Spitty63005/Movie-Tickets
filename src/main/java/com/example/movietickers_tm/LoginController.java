@@ -2,13 +2,16 @@ package com.example.movietickers_tm;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.lang.Character.*;
 
 public class LoginController
 {
@@ -16,20 +19,25 @@ public class LoginController
     private AnchorPane login_ap, register_ap;
 
     @FXML
-    private TextField login_userfield;
+    private TextField login_username_tf, register_email_tf, register_username_tf, register_name_tf;
 
     @FXML
-    private PasswordField login_passfield;
+    private PasswordField login_password_pf, register_password_pf;
+
+    @FXML
+    private Button minimize_btn, login_btn, register_btn;
 
 
+    //region navigation
     public void closeButton(ActionEvent e)
     {
         System.exit(0);
     }
 
-    public void minimizeButton(ActionEvent e)
+    public void minimize(ActionEvent e)
     {
-        // TODO ask sean riley
+        Stage stage = (Stage)minimize_btn.getScene().getWindow();
+        stage.setIconified(true);
     }
 
     public void toggleLoginAndRegister()
@@ -46,13 +54,68 @@ public class LoginController
         }
     }
 
+    //endregion
+    //region login
+
     public void login(ActionEvent e) throws SQLException, IOException
     {
-        String user = login_userfield.getText();
-        String pass = login_passfield.getText();
+
+        String user = login_username_tf.getText();
+        String pass = login_password_pf.getText();
         if(!user.isEmpty() && !pass.isEmpty())
         {
-            DButils.switchScene(DButils.login(user, pass));
+            DButils.switchScene(DButils.login(user, pass), login_btn, "application.fxml");
         }
     }
+    //endregion
+
+    //region signup
+    public void signup(ActionEvent e)throws SQLException, IOException
+    {
+        String user = register_username_tf.getText();
+        String email = register_email_tf.getText();
+        String name = register_name_tf.getText();
+        String password = register_password_pf.getText();
+        boolean emptyTextBoxes = (user.isEmpty() && password.isEmpty() && name.isEmpty() && email.isEmpty());
+        if(emptyTextBoxes)
+            DButils.createAlert(Alert.AlertType.ERROR, "Please enter all test fields.", "Missing information.");
+        if(validateRegisterCredentials(password))
+        {
+            System.out.println(":p");
+            DButils.switchScene(DButils.signup(user, email, name, password), register_btn, "application.fxml");
+        }
+    }
+
+    public boolean validateRegisterCredentials(String pass)
+    {
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9][a-zA-Z0-9]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+");
+        Matcher matcher = pattern.matcher("register_email_tf");
+
+        boolean hasSpecialChar = false;
+        boolean hasCapitalChar = false;
+        boolean hasNumberChar = false;
+        for(int i = 0; i < pass.length(); i++)
+        {
+            if(isDigit(pass.charAt(i)))
+            {
+                hasNumberChar = true;
+                continue;
+            }
+            if(!isDigit(pass.charAt(i)) && !isLetter(pass.charAt(i)))
+            {
+                hasSpecialChar = true;
+                continue;
+            }
+            if(isUpperCase(pass.charAt(i)))
+            {
+                hasCapitalChar = true;
+            }
+
+        }
+
+        return (hasCapitalChar && hasNumberChar && hasSpecialChar) && matcher.find();
+
+    }
+    //endregion
+
 }

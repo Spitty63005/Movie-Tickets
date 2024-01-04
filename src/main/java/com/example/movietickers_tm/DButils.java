@@ -3,6 +3,7 @@ package com.example.movietickers_tm;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -11,8 +12,6 @@ import java.sql.*;
 
 public class DButils
 {
-    private static boolean isDashboardShowing = false;
-
     // region connections and other reused in methods
     public static Connection connectDB()
     {
@@ -40,31 +39,17 @@ public class DButils
         ps.close();
     }
 
-    public static void switchScene(Admin admin) throws IOException, SQLException
+    public static void switchScene(Admin admin, Button btn, String fxmlFileName) throws IOException, SQLException
     {
-        if(isDashboardShowing)
-        {
-            isDashboardShowing = false;
-            Stage stage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setTitle("Hello authenticate to enter!");
-            stage.setScene(scene);
-            stage.show();
-        }
-        else
-        {
-            isDashboardShowing = true;
-            Stage stage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("application.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-            stage.initStyle(StageStyle.UNDECORATED);
-            ApplicationController.setUser(admin);
-            stage.setTitle("Welcome to Our Program!");
-            stage.setScene(scene);
-            stage.show();
-        }
+        Stage currentStage = (Stage)btn.getScene().getWindow();
+        currentStage.close();
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFileName));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        stage.initStyle(StageStyle.UNDECORATED);
+        ApplicationController.setUser(admin);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void getAllInfo(Admin admin) throws SQLException
@@ -114,11 +99,37 @@ public class DButils
 
     }
 
-
-
     //endregion
 
     // region sign up
+    public static Admin signup(String user, String email, String name, String password) throws SQLException
+    {
+        Connection conn = connectDB();
+        PreparedStatement preparedStatement;
+        PreparedStatement insertNewUser;
+        ResultSet resultSet;
 
+        preparedStatement = conn.prepareStatement("SELECT * FROM admin WHERE USERNAME = ?");
+        preparedStatement.setString(1, user);
+        resultSet = preparedStatement.executeQuery();
+
+        if(resultSet.isBeforeFirst())
+        {
+            createAlert(Alert.AlertType.ERROR, "Username is already in use please pick another one.", "Username is taken.");
+        }
+        else
+        {
+            insertNewUser = conn.prepareStatement("INSERT INTO admin (username, password, email, name) VALUES (?, ?, ?, ?)");
+            insertNewUser.setString(1, user);
+            insertNewUser.setString(2, password);
+            insertNewUser.setString(3, email);
+            insertNewUser.setString(4, name);
+            insertNewUser.executeUpdate();
+            insertNewUser.close();
+        }
+        closingUtils(conn, resultSet, preparedStatement);
+
+        return new Admin(user, password, name, email);
+    }
     //endregion
 }
