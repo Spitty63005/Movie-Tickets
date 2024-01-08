@@ -1,0 +1,36 @@
+Index: src/main/resources/com/example/movietickers_tm/application.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.Label?>\r\n<?import javafx.scene.layout.BorderPane?>\r\n<?import javafx.scene.layout.Pane?>\r\n\r\n<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"400.0\" prefWidth=\"600.0\" xmlns=\"http://javafx.com/javafx/21\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"com.example.movietickers_tm.ApplicationController\">\r\n   <top>\r\n      <Pane prefHeight=\"42.0\" prefWidth=\"600.0\" BorderPane.alignment=\"CENTER\">\r\n         <children>\r\n            <Label layoutX=\"267.0\" layoutY=\"13.0\" prefHeight=\"18.0\" prefWidth=\"66.0\" text=\"Dashboard\" />\r\n            <Label layoutX=\"24.0\" layoutY=\"13.0\" text=\"Toddyie's movies\" />\r\n            <Button layoutX=\"506.0\" layoutY=\"6.0\" mnemonicParsing=\"false\" onAction=\"#closeButton\" prefHeight=\"30.0\" prefWidth=\"79.0\" text=\"x\" />\r\n            <Button fx:id=\"minimize_btn\" layoutX=\"409.0\" layoutY=\"6.0\" mnemonicParsing=\"false\" onAction=\"#minimize\" prefHeight=\"30.0\" prefWidth=\"79.0\" text=\"-\" />\r\n         </children>\r\n      </Pane>\r\n   </top>\r\n</BorderPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/com/example/movietickers_tm/application.fxml b/src/main/resources/com/example/movietickers_tm/application.fxml
+--- a/src/main/resources/com/example/movietickers_tm/application.fxml	
++++ b/src/main/resources/com/example/movietickers_tm/application.fxml	
+@@ -4,16 +4,20 @@
+ <?import javafx.scene.control.Label?>
+ <?import javafx.scene.layout.BorderPane?>
+ <?import javafx.scene.layout.Pane?>
++<?import javafx.scene.layout.StackPane?>
+ 
+ <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickers_tm.ApplicationController">
+    <top>
+-      <Pane prefHeight="42.0" prefWidth="600.0" BorderPane.alignment="CENTER">
++      <Pane prefHeight="42.0" prefWidth="600.0" styleClass="top-pane" stylesheets="@Style.css" BorderPane.alignment="CENTER">
+          <children>
+-            <Label layoutX="267.0" layoutY="13.0" prefHeight="18.0" prefWidth="66.0" text="Dashboard" />
+-            <Label layoutX="24.0" layoutY="13.0" text="Toddyie's movies" />
+-            <Button layoutX="506.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeButton" prefHeight="30.0" prefWidth="79.0" text="x" />
+-            <Button fx:id="minimize_btn" layoutX="409.0" layoutY="6.0" mnemonicParsing="false" onAction="#minimize" prefHeight="30.0" prefWidth="79.0" text="-" />
++            <Label layoutX="267.0" layoutY="13.0" prefHeight="18.0" prefWidth="66.0" styleClass="colored-text" text="Dashboard" />
++            <Label layoutX="24.0" layoutY="13.0" styleClass="colored-text" text="Toddyie's movies" />
++            <Button layoutX="506.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeButton" prefHeight="30.0" prefWidth="79.0" styleClass="action-btn" text="x" />
++            <Button fx:id="minimize_btn" layoutX="409.0" layoutY="6.0" mnemonicParsing="false" onAction="#minimize" prefHeight="30.0" prefWidth="79.0" styleClass="action-btn" text="-" />
+          </children>
+       </Pane>
+    </top>
++   <center>
++      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
++   </center>
+ </BorderPane>

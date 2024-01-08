@@ -1,0 +1,31 @@
+.top-pane
+{
+    -fx-background-color: #506C64;
+}
+
+.base-body
+{
+    -fx-background-color: #75B8C8;
+}
+
+.textfield-inputs, .nav-btn
+{
+    -fx-prompt-text-fill: #220C10;
+    -fx-background-color: #CDD3D5;
+}
+
+.action-btn
+{
+    -fx-background-color: #77CBB9;
+}
+ .side-panel
+ {
+    -fx-background-color: #CDD3D5;
+ }
+
+// all text set to the right color
+
+.top-pane, .textfield-inputs, .plain-text, .action-btn
+{
+    -fx-text-fill: #220C10;
+}

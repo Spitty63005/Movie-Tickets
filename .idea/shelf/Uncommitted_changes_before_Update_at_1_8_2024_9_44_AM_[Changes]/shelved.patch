@@ -1,0 +1,231 @@
+Index: src/main/java/com/example/movietickers_tm/LoginController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.movietickers_tm;\r\n\r\nimport javafx.event.ActionEvent;\r\nimport javafx.fxml.FXML;\r\nimport javafx.scene.control.*;\r\nimport javafx.scene.layout.AnchorPane;\r\nimport javafx.stage.Stage;\r\n\r\nimport java.io.IOException;\r\nimport java.sql.SQLException;\r\nimport java.util.regex.Matcher;\r\nimport java.util.regex.Pattern;\r\n\r\nimport static java.lang.Character.*;\r\n\r\npublic class LoginController\r\n{\r\n    @FXML\r\n    private AnchorPane login_ap, register_ap;\r\n\r\n    @FXML\r\n    private TextField login_username_tf, register_email_tf, register_username_tf, register_name_tf;\r\n\r\n    @FXML\r\n    private PasswordField login_password_pf, register_password_pf;\r\n\r\n    @FXML\r\n    private Button minimize_btn, login_btn, register_btn;\r\n\r\n\r\n    //region navigation\r\n    public void closeButton(ActionEvent e)\r\n    {\r\n        System.exit(0);\r\n    }\r\n\r\n    public void minimize(ActionEvent e)\r\n    {\r\n        Stage stage = (Stage)minimize_btn.getScene().getWindow();\r\n        stage.setIconified(true);\r\n    }\r\n\r\n    public void toggleLoginAndRegister()\r\n    {\r\n        if(login_ap.visibleProperty().get())\r\n        {\r\n            login_ap.visibleProperty().set(false);\r\n            register_ap.visibleProperty().set(true);\r\n        }\r\n        else\r\n        {\r\n            login_ap.visibleProperty().set(true);\r\n            register_ap.visibleProperty().set(false);\r\n        }\r\n    }\r\n\r\n    //endregion\r\n    //region login\r\n\r\n    public void login(ActionEvent e) throws SQLException, IOException\r\n    {\r\n\r\n        String user = login_username_tf.getText();\r\n        String pass = login_password_pf.getText();\r\n        if(!user.isEmpty() && !pass.isEmpty())\r\n        {\r\n            DButils.switchScene(DButils.login(user, pass), login_btn, \"application.fxml\");\r\n        }\r\n    }\r\n    //endregion\r\n\r\n    //region signup\r\n    public void signup(ActionEvent e)throws SQLException, IOException\r\n    {\r\n        String user = register_username_tf.getText();\r\n        String email = register_email_tf.getText();\r\n        String name = register_name_tf.getText();\r\n        String password = register_password_pf.getText();\r\n        boolean emptyTextBoxes = (user.isEmpty() && password.isEmpty() && name.isEmpty() && email.isEmpty());\r\n        if(emptyTextBoxes)\r\n            DButils.createAlert(Alert.AlertType.ERROR, \"Please enter all test fields.\", \"Missing information.\");\r\n        if(validateRegisterCredentials(password))\r\n        {\r\n            System.out.println(\":p\");\r\n            DButils.switchScene(DButils.signup(user, email, name, password), register_btn, \"application.fxml\");\r\n        }\r\n    }\r\n\r\n    public boolean validateRegisterCredentials(String pass)\r\n    {\r\n        Pattern pattern = Pattern.compile(\"[a-zA-Z0-9][a-zA-Z0-9]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+\");\r\n        Matcher matcher = pattern.matcher(\"register_email_tf\");\r\n\r\n        boolean hasSpecialChar = false;\r\n        boolean hasCapitalChar = false;\r\n        boolean hasNumberChar = false;\r\n        for(int i = 0; i < pass.length(); i++)\r\n        {\r\n            if(isDigit(pass.charAt(i)))\r\n            {\r\n                hasNumberChar = true;\r\n                continue;\r\n            }\r\n            if(!isDigit(pass.charAt(i)) && !isLetter(pass.charAt(i)))\r\n            {\r\n                hasSpecialChar = true;\r\n                continue;\r\n            }\r\n            if(isUpperCase(pass.charAt(i)))\r\n            {\r\n                hasCapitalChar = true;\r\n            }\r\n\r\n        }\r\n\r\n        return (hasCapitalChar && hasNumberChar && hasSpecialChar) && matcher.find();\r\n\r\n    }\r\n    //endregion\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/movietickers_tm/LoginController.java b/src/main/java/com/example/movietickers_tm/LoginController.java
+--- a/src/main/java/com/example/movietickers_tm/LoginController.java	
++++ b/src/main/java/com/example/movietickers_tm/LoginController.java	
+@@ -72,13 +72,16 @@
+     //region signup
+     public void signup(ActionEvent e)throws SQLException, IOException
+     {
++        System.out.println("called?");
+         String user = register_username_tf.getText();
+         String email = register_email_tf.getText();
+         String name = register_name_tf.getText();
+         String password = register_password_pf.getText();
+         boolean emptyTextBoxes = (user.isEmpty() && password.isEmpty() && name.isEmpty() && email.isEmpty());
++
+         if(emptyTextBoxes)
+             DButils.createAlert(Alert.AlertType.ERROR, "Please enter all test fields.", "Missing information.");
++
+         if(validateRegisterCredentials(password))
+         {
+             System.out.println(":p");
+@@ -88,14 +91,16 @@
+ 
+     public boolean validateRegisterCredentials(String pass)
+     {
+-        Pattern pattern = Pattern.compile("[a-zA-Z0-9][a-zA-Z0-9]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+");
+-        Matcher matcher = pattern.matcher("register_email_tf");
++        System.out.println("wtf");
++        Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
++        Matcher matcher = pattern.matcher(register_email_tf.getText());
+ 
+         boolean hasSpecialChar = false;
+         boolean hasCapitalChar = false;
+         boolean hasNumberChar = false;
+         for(int i = 0; i < pass.length(); i++)
+         {
++            System.out.println(pass.charAt(i));
+             if(isDigit(pass.charAt(i)))
+             {
+                 hasNumberChar = true;
+@@ -112,7 +117,9 @@
+             }
+ 
+         }
+-
++        System.out.println(hasSpecialChar);
++        System.out.println(hasNumberChar);
++        System.out.println(hasSpecialChar);
+         return (hasCapitalChar && hasNumberChar && hasSpecialChar) && matcher.find();
+ 
+     }
+Index: src/main/resources/com/example/movietickers_tm/login.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.Label?>\r\n<?import javafx.scene.control.PasswordField?>\r\n<?import javafx.scene.control.TextField?>\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.layout.BorderPane?>\r\n<?import javafx.scene.layout.Pane?>\r\n<?import javafx.scene.layout.StackPane?>\r\n<?import javafx.scene.text.Font?>\r\n\r\n<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"400.0\" prefWidth=\"600.0\" xmlns=\"http://javafx.com/javafx/21\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"com.example.movietickers_tm.LoginController\">\r\n   <top>\r\n      <Pane prefHeight=\"42.0\" prefWidth=\"600.0\" BorderPane.alignment=\"CENTER\">\r\n         <children>\r\n            <Label layoutX=\"284.0\" layoutY=\"13.0\" prefHeight=\"18.0\" prefWidth=\"32.0\" text=\"login\" />\r\n            <Label layoutX=\"24.0\" layoutY=\"13.0\" text=\"Toddyie's movies\" />\r\n            <Button layoutX=\"506.0\" layoutY=\"6.0\" mnemonicParsing=\"false\" onAction=\"#closeButton\" prefHeight=\"30.0\" prefWidth=\"79.0\" text=\"x\" />\r\n            <Button fx:id=\"minimize_btn\" layoutX=\"409.0\" layoutY=\"6.0\" mnemonicParsing=\"false\" onAction=\"#minimize\" prefHeight=\"30.0\" prefWidth=\"79.0\" text=\"-\" />\r\n         </children>\r\n      </Pane>\r\n   </top>\r\n   <center>\r\n      <StackPane BorderPane.alignment=\"CENTER\">\r\n         <children>\r\n            <AnchorPane fx:id=\"login_ap\" prefHeight=\"200.0\" prefWidth=\"200.0\">\r\n               <children>\r\n                  <TextField fx:id=\"login_username_tf\" layoutX=\"224.0\" layoutY=\"153.0\" onAction=\"#login\" promptText=\"Username\" />\r\n                  <PasswordField fx:id=\"login_password_pf\" layoutX=\"224.0\" layoutY=\"208.0\" onAction=\"#login\" promptText=\"Password\" stylesheets=\"@Style.css\" />\r\n                  <Label fx:id=\"changePasslbl\" layoutX=\"300.0\" layoutY=\"243.0\" prefHeight=\"18.0\" prefWidth=\"84.0\" text=\"Forgot password?\">\r\n                     <font>\r\n                        <Font size=\"10.0\" />\r\n                     </font>\r\n                  </Label>\r\n                  <Button fx:id=\"login_btn\" layoutX=\"241.0\" layoutY=\"278.0\" mnemonicParsing=\"false\" onAction=\"#login\" prefHeight=\"56.0\" prefWidth=\"118.0\" text=\"Login\" />\r\n                  <Button layoutX=\"465.0\" layoutY=\"291.0\" mnemonicParsing=\"false\" onAction=\"#toggleLoginAndRegister\" text=\"Register\" />\r\n                  <Label layoutX=\"428.0\" layoutY=\"261.0\" text=\"Don't have an account?\" />\r\n               </children>\r\n            </AnchorPane>\r\n            <AnchorPane fx:id=\"register_ap\" prefHeight=\"200.0\" prefWidth=\"200.0\" visible=\"false\">\r\n               <children>\r\n                  <Button layoutX=\"465.0\" layoutY=\"291.0\" mnemonicParsing=\"false\" onAction=\"#toggleLoginAndRegister\" prefHeight=\"30.0\" prefWidth=\"64.0\" text=\"Login\" />\r\n                  <Button fx:id=\"register_btn\" layoutX=\"241.0\" layoutY=\"278.0\" mnemonicParsing=\"false\" onAction=\"#signup\" prefHeight=\"56.0\" prefWidth=\"118.0\" text=\"Register\" />\r\n                  <Label layoutX=\"428.0\" layoutY=\"260.0\" text=\"Already have an account?\" />\r\n                  <TextField fx:id=\"register_email_tf\" layoutX=\"107.0\" layoutY=\"153.0\" promptText=\"Email\" />\r\n                  <TextField fx:id=\"register_username_tf\" layoutX=\"107.0\" layoutY=\"208.0\" promptText=\"Username\" />\r\n                  <TextField fx:id=\"register_name_tf\" layoutX=\"313.0\" layoutY=\"153.0\" promptText=\"Name\" />\r\n                  <PasswordField fx:id=\"register_password_pf\" layoutX=\"313.0\" layoutY=\"208.0\" promptText=\"Password\" />\r\n               </children>\r\n            </AnchorPane>\r\n         </children>\r\n      </StackPane>\r\n   </center>\r\n</BorderPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/com/example/movietickers_tm/login.fxml b/src/main/resources/com/example/movietickers_tm/login.fxml
+--- a/src/main/resources/com/example/movietickers_tm/login.fxml	
++++ b/src/main/resources/com/example/movietickers_tm/login.fxml	
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
++<?import java.lang.String?>
+ <?import javafx.scene.control.Button?>
+ <?import javafx.scene.control.Label?>
+ <?import javafx.scene.control.PasswordField?>
+@@ -12,41 +13,49 @@
+ 
+ <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movietickers_tm.LoginController">
+    <top>
+-      <Pane prefHeight="42.0" prefWidth="600.0" BorderPane.alignment="CENTER">
++      <Pane prefHeight="42.0" prefWidth="600.0" styleClass="top-pane" stylesheets="@Style.css" BorderPane.alignment="CENTER">
+          <children>
+-            <Label layoutX="284.0" layoutY="13.0" prefHeight="18.0" prefWidth="32.0" text="login" />
+-            <Label layoutX="24.0" layoutY="13.0" text="Toddyie's movies" />
+-            <Button layoutX="506.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeButton" prefHeight="30.0" prefWidth="79.0" text="x" />
+-            <Button fx:id="minimize_btn" layoutX="409.0" layoutY="6.0" mnemonicParsing="false" onAction="#minimize" prefHeight="30.0" prefWidth="79.0" text="-" />
++            <Label layoutX="284.0" layoutY="13.0" prefHeight="18.0" prefWidth="32.0" styleClass="colored-text" text="login" />
++            <Label layoutX="24.0" layoutY="13.0" styleClass="colored-text" text="Toddyie's movies" />
++            <Button layoutX="506.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeButton" prefHeight="30.0" prefWidth="79.0" text="x">
++               <styleClass>
++                  <String fx:value="action-btn" />
++                  <String fx:value="colored-text" />
++               </styleClass></Button>
++            <Button fx:id="minimize_btn" layoutX="409.0" layoutY="6.0" mnemonicParsing="false" onAction="#minimize" prefHeight="30.0" prefWidth="79.0" text="-">
++               <styleClass>
++                  <String fx:value="action-btn" />
++                  <String fx:value="colored-text" />
++               </styleClass></Button>
+          </children>
+       </Pane>
+    </top>
+    <center>
+       <StackPane BorderPane.alignment="CENTER">
+          <children>
+-            <AnchorPane fx:id="login_ap" prefHeight="200.0" prefWidth="200.0">
++            <AnchorPane fx:id="login_ap" prefHeight="200.0" prefWidth="200.0" styleClass="base-background" stylesheets="@Style.css" visible="false">
+                <children>
+-                  <TextField fx:id="login_username_tf" layoutX="224.0" layoutY="153.0" onAction="#login" promptText="Username" />
+-                  <PasswordField fx:id="login_password_pf" layoutX="224.0" layoutY="208.0" onAction="#login" promptText="Password" stylesheets="@Style.css" />
+-                  <Label fx:id="changePasslbl" layoutX="300.0" layoutY="243.0" prefHeight="18.0" prefWidth="84.0" text="Forgot password?">
++                  <TextField fx:id="login_username_tf" layoutX="224.0" layoutY="153.0" onAction="#login" promptText="Username" styleClass="textfield-login" />
++                  <PasswordField fx:id="login_password_pf" layoutX="224.0" layoutY="208.0" onAction="#login" promptText="Password" styleClass="textfield-login" stylesheets="@Style.css" />
++                  <Label fx:id="changePasslbl" layoutX="300.0" layoutY="243.0" prefHeight="18.0" prefWidth="84.0" styleClass="colored-text" text="Forgot password?">
+                      <font>
+                         <Font size="10.0" />
+                      </font>
+                   </Label>
+-                  <Button fx:id="login_btn" layoutX="241.0" layoutY="278.0" mnemonicParsing="false" onAction="#login" prefHeight="56.0" prefWidth="118.0" text="Login" />
+-                  <Button layoutX="465.0" layoutY="291.0" mnemonicParsing="false" onAction="#toggleLoginAndRegister" text="Register" />
+-                  <Label layoutX="428.0" layoutY="261.0" text="Don't have an account?" />
++                  <Button fx:id="login_btn" layoutX="241.0" layoutY="278.0" mnemonicParsing="false" onAction="#login" prefHeight="56.0" prefWidth="118.0" styleClass="action-btn" stylesheets="@Style.css" text="Login" />
++                  <Button layoutX="465.0" layoutY="291.0" mnemonicParsing="false" onAction="#toggleLoginAndRegister" styleClass="action-btn" text="Register" />
++                  <Label layoutX="428.0" layoutY="261.0" styleClass="colored-text" text="Don't have an account?" />
+                </children>
+             </AnchorPane>
+-            <AnchorPane fx:id="register_ap" prefHeight="200.0" prefWidth="200.0" visible="false">
++            <AnchorPane fx:id="register_ap" prefHeight="200.0" prefWidth="200.0" styleClass="base-background" stylesheets="@Style.css">
+                <children>
+-                  <Button layoutX="465.0" layoutY="291.0" mnemonicParsing="false" onAction="#toggleLoginAndRegister" prefHeight="30.0" prefWidth="64.0" text="Login" />
+-                  <Button fx:id="register_btn" layoutX="241.0" layoutY="278.0" mnemonicParsing="false" onAction="#signup" prefHeight="56.0" prefWidth="118.0" text="Register" />
+-                  <Label layoutX="428.0" layoutY="260.0" text="Already have an account?" />
+-                  <TextField fx:id="register_email_tf" layoutX="107.0" layoutY="153.0" promptText="Email" />
+-                  <TextField fx:id="register_username_tf" layoutX="107.0" layoutY="208.0" promptText="Username" />
+-                  <TextField fx:id="register_name_tf" layoutX="313.0" layoutY="153.0" promptText="Name" />
+-                  <PasswordField fx:id="register_password_pf" layoutX="313.0" layoutY="208.0" promptText="Password" />
++                  <TextField fx:id="register_email_tf" layoutX="107.0" layoutY="153.0" promptText="Email" styleClass="textfield-login" />
++                  <TextField fx:id="register_name_tf" layoutX="313.0" layoutY="153.0" promptText="Name" styleClass="textfield-login" />
++                  <TextField fx:id="register_username_tf" layoutX="107.0" layoutY="208.0" promptText="Username" styleClass="textfield-login" />
++                  <PasswordField fx:id="register_password_pf" layoutX="313.0" layoutY="208.0" promptText="Password" styleClass="textfield-login" />
++                  <Button fx:id="register_btn" layoutX="241.0" layoutY="278.0" mnemonicParsing="false" onAction="#signup" prefHeight="56.0" prefWidth="118.0" styleClass="action-btn" text="Register" />
++                  <Button layoutX="465.0" layoutY="291.0" mnemonicParsing="false" onAction="#toggleLoginAndRegister" prefHeight="30.0" prefWidth="64.0" styleClass="action-btn" text="Login" />
++                  <Label layoutX="428.0" layoutY="260.0" styleClass="colored-text" text="Already have an account?" />
+                </children>
+             </AnchorPane>
+          </children>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"e555fb77-bede-4458-a3f1-402aac6a5a17\" name=\"Changes\" comment=\"initial commit\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/ApplicationController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/ApplicationController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/DButils.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/DButils.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/LoginController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/LoginController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/application.fxml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/application.fxml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/login.fxml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/login.fxml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"FxmlFile\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 3\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2aRvfruz3xNrpeFuUzye2AuYFTj\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\">\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;master&quot;,\r\n    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-19&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/manningtw/IdeaProjects/MovieTickers_TM/lib/mysql-connector-j-8.1.0.jar&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\manningtw\\IdeaProjects\\MovieTickers_TM\\lib\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.example.movietickers_tm.Main\" />\r\n      <module name=\"MovieTickers_TM\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.example.movietickers_tm.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Main\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"e555fb77-bede-4458-a3f1-402aac6a5a17\" name=\"Changes\" comment=\"\" />\r\n      <created>1704294314524</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1704294314524</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"initial commit\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1704309475274</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1704309475274</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"initial commit\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"initial commit\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -4,12 +4,10 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="e555fb77-bede-4458-a3f1-402aac6a5a17" name="Changes" comment="initial commit">
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++    <list default="true" id="e555fb77-bede-4458-a3f1-402aac6a5a17" name="Changes" comment="secind">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/ApplicationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/ApplicationController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/DButils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/DButils.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/LoginController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/Style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/Style.css" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/application.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/application.fxml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/login.fxml" afterDir="false" />
+     </list>
+@@ -44,7 +42,6 @@
+   &quot;keyToString&quot;: {
+     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-19&quot;,
+     &quot;last_opened_file_path&quot;: &quot;C:/Users/manningtw/IdeaProjects/MovieTickers_TM/lib/mysql-connector-j-8.1.0.jar&quot;,
+@@ -96,11 +93,20 @@
+       <option name="project" value="LOCAL" />
+       <updated>1704309475274</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="secind">
++      <option name="closed" value="true" />
++      <created>1704395608490</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1704395608490</updated>
++    </task>
++    <option name="localTasksCounter" value="3" />
+     <servers />
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="initial commit" />
+-    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
++    <MESSAGE value="secind" />
++    <option name="LAST_COMMIT_MESSAGE" value="secind" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: src/main/resources/com/example/movietickers_tm/Style.css
+===================================================================
+diff --git a/src/main/resources/com/example/movietickers_tm/Style.css b/src/main/resources/com/example/movietickers_tm/Style.css
+--- a/src/main/resources/com/example/movietickers_tm/Style.css	
++++ b/src/main/resources/com/example/movietickers_tm/Style.css	
+@@ -1,0 +1,23 @@
++.base-background
++{
++    -fx-background-color: #75B8C8;
++}
++.top-pane
++{
++    -fx-background-color: #77CBB9;
++    -fx-text-fill: #220C10;
++}
++.action-btn{
++    -fx-background-color: #506C64;
++    -fx-text-fill: #220C10;
++}
++.textfield-login
++{
++    -fx-background-color: #CDD3D5;
++    -fx-text-fill: #220C10;
++    -fx-prompt-text-fill: #220C10;
++}
++.colored-text
++{
++    -fx-text-fill: #220C10;
++}
+\ No newline at end of file

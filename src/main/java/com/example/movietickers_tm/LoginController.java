@@ -82,7 +82,7 @@ public class LoginController
         else
         {
             System.out.println(":p");
-            if(!validateRegisterCredentials())
+            if(!validateRegisterCredentials(password))
             {
                 DButils.createAlert(Alert.AlertType.ERROR, "Please enter a valid email.", "Invalid email.");
                 return;
@@ -91,11 +91,37 @@ public class LoginController
         }
     }
 
-    public boolean validateRegisterCredentials()
+    public boolean validateRegisterCredentials(String pass)
     {
-        Pattern pattern = Pattern.compile("^[\\w-.]+@([\\w-]+.)+[\\w-]{2,4}$");
+        Pattern pattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+.)+[\\w-]{2,4}$");
         Matcher matcher = pattern.matcher(register_email_tf.getText());
-        return matcher.find();
+
+        boolean hasCapitalChar = false;
+        boolean hasNumberChar = false;
+        boolean hasSpecialChar = false;
+
+        for(int i = 0; i < pass.length(); i++)
+        {
+            if(Character.isDigit(pass.charAt(i)))
+            {
+                hasNumberChar = true;
+                continue;
+            }
+            if(Character.isUpperCase(pass.charAt(i)))
+            {
+                hasCapitalChar = true;
+                continue;
+            }
+            if(!Character.isDigit(pass.charAt(i)) && !Character.isLetter(pass.charAt(i)))
+            {
+                hasSpecialChar = true;
+            }
+
+        }
+
+
+
+        return (hasCapitalChar && hasNumberChar && hasSpecialChar) && matcher.find();
 
     }
     //endregion
