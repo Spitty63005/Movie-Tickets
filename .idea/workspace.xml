@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="e555fb77-bede-4458-a3f1-402aac6a5a17" name="Changes" comment="initial commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/ApplicationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/ApplicationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/DButils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/DButils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/movietickers_tm/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/LoginStyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/LoginStyle.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/application.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/application.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/movietickers_tm/login.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

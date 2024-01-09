@@ -23,6 +23,14 @@
     -fx-background-color: #CDD3D5;
  }
 
+.rounded-box
+{
+    -fx-arc-width: 10;
+    -fx-arc-height: 10;
+
+}
+
+
 // all text set to the right color
 
 .top-pane, .textfield-inputs, .plain-text, .action-btn

@@ -64,7 +64,9 @@ public class LoginController
         String pass = login_password_pf.getText();
         if(!user.isEmpty() && !pass.isEmpty())
         {
-            DButils.switchScene(DButils.login(user, pass), login_btn, "application.fxml");
+            Admin admin = DButils.login(user, pass);
+            if(!(admin == null))
+                DButils.switchScene(admin, login_btn, "application.fxml");
         }
     }
     //endregion

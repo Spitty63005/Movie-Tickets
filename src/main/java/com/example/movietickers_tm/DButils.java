@@ -52,17 +52,24 @@ public class DButils
         stage.show();
     }
 
-    public static void getAllInfo(Admin admin) throws SQLException
+    public static void getAllUserInfo(Admin user) throws SQLException
     {
         Connection conn = connectDB();
         PreparedStatement preparedStatement;
         ResultSet resultSet;
 
-        preparedStatement = conn.prepareStatement("SELECT * FROM ADMIN WHERE username = ?");
-        preparedStatement.setString(1, admin.getUsername());
+        preparedStatement = conn.prepareStatement("SELECT email, name FROM users WHERE username = ?");
+        preparedStatement.setString(1, user.getUsername());
         resultSet = preparedStatement.executeQuery();
 
-        System.out.println(resultSet);
+        if(!resultSet.isBeforeFirst())
+        {
+            createAlert(Alert.AlertType.ERROR, "Username is incorrect, user not found.",
+                    "User does not exist");
+        }
+
+        user.setEmail(resultSet.getString("email"));
+        user.setName(resultSet.getString("name"));
     }
 
     //endregion
@@ -75,7 +82,7 @@ public class DButils
         ResultSet resultSet;
 
         // select everything where the username and password match each other
-        preparedStatement = conn.prepareStatement("SELECT * FROM admin WHERE username = ? AND password = ?");
+        preparedStatement = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
         preparedStatement.setString(1, user);
         preparedStatement.setString(2, pass);
         resultSet = preparedStatement.executeQuery();
@@ -109,7 +116,7 @@ public class DButils
         PreparedStatement insertNewUser;
         ResultSet resultSet;
 
-        preparedStatement = conn.prepareStatement("SELECT * FROM admin WHERE USERNAME = ?");
+        preparedStatement = conn.prepareStatement("SELECT * FROM users WHERE USERNAME = ?");
         preparedStatement.setString(1, user);
         resultSet = preparedStatement.executeQuery();
 
@@ -119,7 +126,7 @@ public class DButils
         }
         else
         {
-            insertNewUser = conn.prepareStatement("INSERT INTO admin (username, password, email, name) VALUES (?, ?, ?, ?)");
+            insertNewUser = conn.prepareStatement("INSERT INTO users (username, password, email, name) VALUES (?, ?, ?, ?)");
             insertNewUser.setString(1, user);
             insertNewUser.setString(2, password);
             insertNewUser.setString(3, email);
