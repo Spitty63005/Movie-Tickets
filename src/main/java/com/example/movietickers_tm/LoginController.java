@@ -42,6 +42,7 @@ public class LoginController
 
     public void toggleLoginAndRegister()
     {
+        clearFields();
         if(login_ap.visibleProperty().get())
         {
             login_ap.visibleProperty().set(false);
@@ -52,6 +53,16 @@ public class LoginController
             login_ap.visibleProperty().set(true);
             register_ap.visibleProperty().set(false);
         }
+    }
+
+    public void clearFields()
+    {
+        login_username_tf.setText("");
+        register_email_tf.setText("");
+        register_name_tf.setText("");
+        register_username_tf.setText("");
+        login_password_pf.setText("");
+        register_password_pf.setText("");
     }
 
     //endregion
@@ -65,8 +76,10 @@ public class LoginController
         if(!user.isEmpty() && !pass.isEmpty())
         {
             Admin admin = DButils.login(user, pass);
-            if(!(admin == null))
+            if(admin != null)
+            {
                 DButils.switchScene(admin, login_btn, "application.fxml");
+            }
         }
     }
     //endregion

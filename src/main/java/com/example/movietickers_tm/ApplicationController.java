@@ -22,29 +22,31 @@ public class ApplicationController implements Initializable
     private Button minimize_btn;
 
     @FXML
-    private Label tab_name_lbl, available_movies_lbl, earns_today_lbl, tickets_sold_lbl;
-    @FXML
-    private static Label welcome_lbl;
-
+    private Label tab_name_lbl, available_movies_lbl, earns_today_lbl, tickets_sold_lbl, welcome_lbl;
     private static Admin currentUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-
+        makeWelcomeText();
     }
 
-    public static void onLoad()
+    public static void onLoad(Label welcome_lbl)
     {
         welcome_lbl.setText("Welcome \n" + currentUser.getName());
+    }
+
+    public void makeWelcomeText()
+    {
+        onLoad(welcome_lbl);
     }
 
     // region Navigation
     public static void setUser(Admin user) throws SQLException
     {
         currentUser = user;
+        System.out.println(currentUser);
         DButils.getAllUserInfo(user);
-        onLoad();
     }
 
     public void closeButton(ActionEvent e)

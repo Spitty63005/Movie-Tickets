@@ -41,19 +41,23 @@ public class DButils
 
     public static void switchScene(Admin admin, Button btn, String fxmlFileName) throws IOException, SQLException
     {
-        Stage currentStage = (Stage)btn.getScene().getWindow();
+        Stage currentStage = (Stage) btn.getScene().getWindow();
         currentStage.close();
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFileName));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        if (admin != null)
+        {
+            ApplicationController.setUser(admin);
+        }
+        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
         stage.initStyle(StageStyle.UNDECORATED);
-        ApplicationController.setUser(admin);
         stage.setScene(scene);
         stage.show();
     }
 
     public static void getAllUserInfo(Admin user) throws SQLException
     {
+        System.out.println(user);
         Connection conn = connectDB();
         PreparedStatement preparedStatement;
         ResultSet resultSet;
@@ -64,12 +68,14 @@ public class DButils
 
         if(!resultSet.isBeforeFirst())
         {
-            createAlert(Alert.AlertType.ERROR, "Username is incorrect, user not found.",
-                    "User does not exist");
+            createAlert(Alert.AlertType.ERROR, "Username or Password is incorrect.",
+                    "Incorrect login Info");
         }
-
-        user.setEmail(resultSet.getString("email"));
-        user.setName(resultSet.getString("name"));
+        while(resultSet.next() && user.getEmail().isEmpty())
+        {
+            user.setEmail(resultSet.getString("email"));
+            user.setName(resultSet.getString("name"));
+        }
     }
 
     //endregion
