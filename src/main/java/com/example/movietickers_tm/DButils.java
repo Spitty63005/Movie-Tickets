@@ -1,5 +1,7 @@
 package com.example.movietickers_tm;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -7,8 +9,12 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class DButils
 {
@@ -42,6 +48,18 @@ public class DButils
     public static void switchScene(Admin admin, Button btn, String fxmlFileName) throws IOException, SQLException
     {
         Stage currentStage = (Stage) btn.getScene().getWindow();
+        double width = currentStage.getWidth();
+        double height = currentStage.getHeight();
+        if(width > 600)
+        {
+            width -= 200;
+            height-= 200;
+        }
+        else
+        {
+            width += 200;
+            height += 200;
+        }
         currentStage.close();
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFileName));
@@ -49,7 +67,7 @@ public class DButils
         {
             ApplicationController.setUser(admin);
         }
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(fxmlLoader.load(), width, height);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.show();
@@ -144,5 +162,78 @@ public class DButils
 
         return new Admin(user, password, name, email);
     }
+    //endregion
+
+    //region add movies
+
+    public static ObservableList<Movie> getMoviesFromDatabase()
+    {
+        ObservableList<Movie> movieList = FXCollections.observableArrayList();
+        Connection connection = connectDB();
+        try
+        {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM movies");
+            ResultSet rs = ps.executeQuery();
+            Movie movie;
+            while(rs.next())
+            {
+                movie = new Movie(rs.getString("movieName"), rs.getString("genre"),
+                        rs.getDate("releaseDate"), rs.getString("duration"));
+
+                movieList.add(movie);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return movieList;
+    }
+
+    public static void addMovieToDataBase(String title, String duration, String genre, LocalDate date) throws SQLException
+    {
+        Connection conn = connectDB();
+        PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO movies (movieName, genre," +
+                " duration, releaseDate) VALUES(?, ?, ?, ?);");
+
+        System.out.println(duration);
+
+        Date sqlDate = Date.valueOf(date);
+
+        preparedStatement.setString(1, title);
+        preparedStatement.setString(2, genre);
+        preparedStatement.setString(3, duration);
+        preparedStatement.setDate(4,  sqlDate);
+
+        preparedStatement.executeUpdate();
+    }
+
+    public static void updateMovieInDataBase(String title, String duration, String genre, LocalDate date, int index) throws SQLException
+    {
+        Connection conn = connectDB();
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "UPDATE movies SET movieName = ?, genre = ?, duration = ?, releaseDate = ?" +
+                "WHERE movieId =" + index+";");
+
+
+
+        Date sqlDate = Date.valueOf(date);
+
+        preparedStatement.setString(1, title);
+        preparedStatement.setString(2, genre);
+        preparedStatement.setString(3, duration);
+        preparedStatement.setDate(4,  sqlDate);
+
+        preparedStatement.executeUpdate();
+    }
+
+    public static void deleteMovieFromDataBase(int selectedIndex) throws SQLException
+    {
+        Connection conn = connectDB();
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "DELETE FROM movies WHERE movieid = "+selectedIndex+";");
+        preparedStatement.executeUpdate();
+    }
+
     //endregion
 }

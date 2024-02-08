@@ -21,6 +21,9 @@ public class Main extends Application
         stage.show();
     }
 
+    // TODO i do not know how to do images yet so i amd going to make the whole project work without them
+    // TODO until i reach a point where i feel comfortable implementing them
+
     public static void main(String[] args)
     {
         launch();
